@@ -46,8 +46,6 @@ public class UI_Timer : MonoBehaviour
             waktuBerjalan = false;
             return;
         }
-
-        Debug.Log(sisaWaktu);
     }
 
     public void UlangWaktu()
