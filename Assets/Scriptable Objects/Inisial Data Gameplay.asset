@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25ff43dd45454f34e8f328f541573c94, type: 3}
-  m_Name: Player Progress
+  m_Script: {fileID: 11500000, guid: b5475ba4d0f772d429756d26f552ec12, type: 3}
+  m_Name: Inisial Data Gameplay
   m_EditorClassIdentifier: 
-  fileName: contoh.txt
-  progressData:
-    koin: 0
+  levelPack: {fileID: 0}
+  levelIndex: 0
+  _saatKalah: 0

@@ -6,6 +6,12 @@ using TMPro;
 public class UI_PesanLevel : MonoBehaviour
 {
     [SerializeField]
+    private GameObject opsiMenang;
+
+    [SerializeField]
+    private GameObject opsiKalah;
+
+    [SerializeField]
     private TextMeshProUGUI tempatPesan = null;
 
     public string Pesan
@@ -18,17 +24,40 @@ public class UI_PesanLevel : MonoBehaviour
     {
         if (gameObject.activeSelf)
             gameObject.SetActive(false);
+
+        UI_Timer.EventWaktuHabis += UI_Timer_EventWaktuHabis;
+        UI_PoinJawaban.EventJawabSoal += UI_PoinJawaban_EventJawabSoal;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnDestroy()
     {
-        
+        UI_Timer.EventWaktuHabis -= UI_Timer_EventWaktuHabis;
+        UI_PoinJawaban.EventJawabSoal -= UI_PoinJawaban_EventJawabSoal;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void UI_Timer_EventWaktuHabis()
     {
-        
+        Pesan = "Waktu Sudah Habis!";
+        gameObject.SetActive(true);
+
+        opsiMenang.SetActive(false);
+        opsiKalah.SetActive(true);
+    }
+
+    private void UI_PoinJawaban_EventJawabSoal(string jawabanTeks, bool adalahBenar)
+    {
+        Pesan = $"Jawaban Anda {adalahBenar} (Jawab: {jawabanTeks})";
+        gameObject.SetActive(true);
+
+        if (adalahBenar)
+        {
+            opsiMenang.SetActive(true);
+            opsiKalah.SetActive(false);
+        }
+        else
+        {
+            opsiMenang.SetActive(false);
+            opsiKalah.SetActive(true);
+        }
     }
 }
