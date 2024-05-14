@@ -6,6 +6,9 @@ using TMPro;
 public class UI_PesanLevel : MonoBehaviour
 {
     [SerializeField]
+    private Animator _animator;
+
+    [SerializeField]
     private GameObject opsiMenang;
 
     [SerializeField]
@@ -42,6 +45,8 @@ public class UI_PesanLevel : MonoBehaviour
 
         opsiMenang.SetActive(false);
         opsiKalah.SetActive(true);
+
+        _animator.SetBool("Menang", false);
     }
 
     private void UI_PoinJawaban_EventJawabSoal(string jawabanTeks, bool adalahBenar)
@@ -59,5 +64,7 @@ public class UI_PesanLevel : MonoBehaviour
             opsiMenang.SetActive(false);
             opsiKalah.SetActive(true);
         }
+
+        _animator.SetBool("Menang", adalahBenar);
     }
 }

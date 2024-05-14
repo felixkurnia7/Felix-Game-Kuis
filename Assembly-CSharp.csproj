@@ -70,8 +70,11 @@
     <Compile Include="Assets\Scripts\LevelMenuDataManager.cs" />
     <Compile Include="Assets\Scripts\UI_PoinJawaban.cs" />
     <Compile Include="Assets\Scriptable Objects\Scripts\LevelPackKuis.cs" />
+    <Compile Include="Assets\Scripts\PemanggilSuara.cs" />
     <Compile Include="Assets\Scripts\UI_OpsiLevelPack.cs" />
     <Compile Include="Assets\Scripts\UI_OpsiLevelKuis.cs" />
+    <Compile Include="Assets\Scripts\UI_MenuConfirmMessage.cs" />
+    <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scriptable Objects\Scripts\InisialDataGameplay.cs" />
     <Compile Include="Assets\Scripts\UI_Timer.cs" />
     <Compile Include="Assets\Scripts\PlayerProgress.cs" />

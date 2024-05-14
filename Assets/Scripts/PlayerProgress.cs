@@ -19,18 +19,32 @@ public class PlayerProgress : ScriptableObject
     [SerializeField]
     private string fileName = "contoh.txt";
 
+    [SerializeField]
+    private string _startingLevelPackName;
+
     public MainData progressData = new();
 
     public void SimpanProgress()
     {
-        progressData.koin = 200;
+        //progressData.koin = 200;
+        //if (progressData.progressLevel == null)
+        //    progressData.progressLevel = new();
+
+        //progressData.progressLevel.Add("Level Pack 1", 3);
+        //progressData.progressLevel.Add("Level Pack 3", 5);
+
         if (progressData.progressLevel == null)
+        {
             progressData.progressLevel = new();
+            progressData.koin = 0;
+            progressData.progressLevel.Add(_startingLevelPackName, 1);
+        }
 
-        progressData.progressLevel.Add("Level Pack 1", 3);
-        progressData.progressLevel.Add("Level Pack 3", 5);
-
+#if UNITY_EDITOR
         var directory = Application.dataPath + "/Temporary";
+#elif (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+        var directory = Application.persistentDataPath + "/ProgresLokal";
+#endif
         var path = directory + "/" + fileName;
 
         if (!Directory.Exists(directory))

@@ -5,6 +5,9 @@ using UnityEngine;
 public class UI_LevelPackList : MonoBehaviour
 {
     [SerializeField]
+    private Animator _animator;
+
+    [SerializeField]
     private UI_LevelKuisList _levelList;
 
     [SerializeField]
@@ -16,16 +19,14 @@ public class UI_LevelPackList : MonoBehaviour
     [SerializeField]
     private InisialDataGameplay _inisialData;
 
-    [Space, SerializeField]
-    private LevelPackKuis[] _levelPacks = new LevelPackKuis[0];
 
     private void Start()
     {
-        LoadLevelPack();
+        //LoadLevelPack();
 
         if (_inisialData.SaatKalah)
         {
-            UI_OpsiLevelPack_EventSaatKlik(_inisialData.levelPack);
+            UI_OpsiLevelPack_EventSaatKlik(null, _inisialData.levelPack, false);
         }
 
         UI_OpsiLevelPack.EventSaatKlik += UI_OpsiLevelPack_EventSaatKlik;
@@ -36,19 +37,23 @@ public class UI_LevelPackList : MonoBehaviour
         UI_OpsiLevelPack.EventSaatKlik -= UI_OpsiLevelPack_EventSaatKlik;
     }
 
-    private void UI_OpsiLevelPack_EventSaatKlik(LevelPackKuis levelPack)
+    private void UI_OpsiLevelPack_EventSaatKlik(UI_OpsiLevelPack tombolLevelPack, LevelPackKuis levelPack, bool terkunci)
     {
-        _levelList.gameObject.SetActive(true);
+        if (terkunci)
+            return;
+
+        //_levelList.gameObject.SetActive(true);
         _levelList.UnloadLevelPack(levelPack);
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
 
         _inisialData.levelPack = levelPack;
+        _animator.SetTrigger("KeLevel");
     }
 
-    private void LoadLevelPack()
+    public void LoadLevelPack(LevelPackKuis[] levelPacks, PlayerProgress.MainData playerData)
     {
-        foreach (var lp in _levelPacks)
+        foreach (var lp in levelPacks)
         {
             var t = Instantiate(_tombolLevelPack);
 
@@ -57,6 +62,11 @@ public class UI_LevelPackList : MonoBehaviour
             t.transform.SetParent(_content);
 
             t.transform.localScale = Vector3.one;
+
+            if (!playerData.progressLevel.ContainsKey(lp.name))
+            {
+                t.KunciLevelPack();
+            }
         }
     }
 }
