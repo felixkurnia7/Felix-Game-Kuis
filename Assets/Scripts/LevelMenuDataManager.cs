@@ -25,8 +25,7 @@ public class LevelMenuDataManager : MonoBehaviour
     void Start()
     {
 
-        if (!_playerProgress.MuatProgress())
-            _playerProgress.SimpanProgress();
+        _playerProgress.MuatProgress();
 
         _levelPackList.LoadLevelPack(_levelPacks, _playerProgress.progressData);
 

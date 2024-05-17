@@ -17,7 +17,7 @@ public class PlayerProgress : ScriptableObject
     }
 
     [SerializeField]
-    private string fileName = "contoh.txt";
+    private string fileName = "save.sav";
 
     [SerializeField]
     private string _startingLevelPackName;
@@ -40,12 +40,13 @@ public class PlayerProgress : ScriptableObject
             progressData.progressLevel.Add(_startingLevelPackName, 1);
         }
 
-#if UNITY_EDITOR
-        var directory = Application.dataPath + "/Temporary";
-#elif (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
-        var directory = Application.persistentDataPath + "/ProgresLokal";
-#endif
-        var path = directory + "/" + fileName;
+//#if UNITY_EDITOR
+//        var directory = Application.dataPath + "/Temporary";
+//#elif (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+//        var directory = Application.persistentDataPath + "/ProgresLokal";
+//#endif
+        string directory = Application.persistentDataPath + "/Save/";
+        string path = directory + fileName;
 
         if (!Directory.Exists(directory))
         {
@@ -53,19 +54,22 @@ public class PlayerProgress : ScriptableObject
             Debug.Log("Directory has been created: " + directory);
         }
 
-        if (File.Exists(path))
+        if (!File.Exists(path))
         {
             File.Create(path).Dispose();
             Debug.Log("File Created: " + path);
         }
 
-        var fileStream = File.Open(path, FileMode.OpenOrCreate);
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream datafile = new FileStream(path, FileMode.Create);
+
+        //var fileStream = File.Open(path, FileMode.OpenOrCreate);
 
         // Binary Formatter
-        var formatter = new BinaryFormatter();
+        //var formatter = new BinaryFormatter();
 
-        fileStream.Flush();
-        formatter.Serialize(fileStream, progressData);
+        //fileStream.Flush();
+        formatter.Serialize(datafile, progressData);
         //------------------------------------------------------------------
 
         // Binary Writer
@@ -80,21 +84,31 @@ public class PlayerProgress : ScriptableObject
 
         //writer.Dispose();
         //------------------------------------------------------------------
-
-        fileStream.Dispose();
+        datafile.Close();
+        //fileStream.Dispose();
 
         Debug.Log($"{fileName} berhasil disimpan");
     }
 
-    public bool MuatProgress()
+    public void MuatProgress()
     {
-        var directory = Application.dataPath + "/Temporary";
-        var path = directory + "/" + fileName;
+        string directory = Application.persistentDataPath + "/Save/";
+        string path = directory + fileName;
 
-        var fileStream = File.Open(path, FileMode.OpenOrCreate);
-
-        try
+        //var fileStream = File.Open(path, FileMode.OpenOrCreate);
+        if (File.Exists(path))
         {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream dataFile = new FileStream(path, FileMode.Open);
+            progressData = (MainData)formatter.Deserialize(dataFile);
+            dataFile.Close();
+        }
+        else
+        {
+            SimpanProgress();
+        }
+        //try
+        //{
             // Binary Reader
             //var reader = new BinaryReader(fileStream);
 
@@ -123,20 +137,20 @@ public class PlayerProgress : ScriptableObject
             //-----------------------------------------------------------------------------------------
 
             // Binary Formatter
-            var formatter = new BinaryFormatter();
+        //    var formatter = new BinaryFormatter();
 
-            progressData = (MainData)formatter.Deserialize(fileStream);
-            Debug.Log($"{progressData.koin}; {progressData.progressLevel.Count}");
+        //    progressData = (MainData)formatter.Deserialize(fileStream);
+        //    Debug.Log($"{progressData.koin}; {progressData.progressLevel.Count}");
 
-            fileStream.Dispose();
-            return true;
-        }
-        catch(System.Exception e)
-        {
-            fileStream.Dispose();
-            Debug.Log($"ERROR: Terjadi Kesalahan Saat Memuat Progress\n {e.Message}");
+        //    fileStream.Dispose();
+        //    return true;
+        //}
+        //catch(System.Exception e)
+        //{
+        //    fileStream.Dispose();
+        //    Debug.Log($"ERROR: Terjadi Kesalahan Saat Memuat Progress\n {e.Message}");
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }
